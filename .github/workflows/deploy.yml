@@ -18,13 +18,13 @@ jobs:
         with:
           node-version: '18'
 
-      # ✅ FIXED: use working-directory instead of cd
+      # ✅ FIXED PATH (IMPORTANT)
       - name: Install dependencies
-        working-directory: ./frontend
+        working-directory: ./frontend/frontend
         run: npm install
 
       - name: Build project
-        working-directory: ./frontend
+        working-directory: ./frontend/frontend
         run: npm run build
 
       - name: Configure AWS Credentials
@@ -34,5 +34,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # ✅ ALSO FIX BUILD PATH
       - name: Deploy to S3
-        run: aws s3 cp frontend/build/ s3://frontend-bucket-0fbdbc1/ --recursive
+        run: aws s3 cp frontend/frontend/build/ s3://frontend-bucket-0fbdbc1/ --recursive
