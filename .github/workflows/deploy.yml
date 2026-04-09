@@ -9,10 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./frontend   # 👈 GLOBAL FIX
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,11 +18,16 @@ jobs:
         with:
           node-version: '18'
 
+      # ✅ BACK TO SIMPLE (this is safest)
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install
 
       - name: Build project
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -36,4 +37,5 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy to S3
-        run: aws s3 cp build/ s3://frontend-bucket-0fbdbc1/ --recursive
+        run: |
+          aws s3 cp frontend/build/ s3://frontend-bucket-0fbdbc1/ --recursive
