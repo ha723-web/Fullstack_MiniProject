@@ -18,17 +18,15 @@ jobs:
         with:
           node-version: '18'
 
+      # ✅ FIXED: use working-directory instead of cd
       - name: Install dependencies
-        run: |
-          cd frontend
-          npm install
+        working-directory: ./frontend
+        run: npm install
 
       - name: Build project
-        run: |
-          cd frontend
-          npm run build
+        working-directory: ./frontend
+        run: npm run build
 
-      # 🔑 IMPORTANT STEP (missing in your version)
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
